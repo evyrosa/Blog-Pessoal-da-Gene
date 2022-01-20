@@ -40,5 +40,20 @@ public class PostagemController {
 	public ResponseEntity<List<Postagem>> GetByTitulo(@PathVariable String titulo){
 		return ResponseEntity.ok(repository.findAllByTituloContainingIgnoreCase(titulo));
 	}
+	
+	@PostMapping
+	public ResponseEntity<Postagem> Post(@RequestBody Postagem postagem){
+		return ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem));
+	}
+	
+	@PutMapping
+	public ResponseEntity<Postagem> Put(@RequestBody Postagem postagem){
+		return ResponseEntity.status(HttpStatus.OK).body(repository.save(postagem));
+	}
+	
+	@DeleteMapping("/{id}")
+	public void Delete(@PathVariable Long id) {
+		repository.deleteById(id);
+	}
 
 }
