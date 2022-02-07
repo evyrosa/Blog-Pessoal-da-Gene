@@ -1,12 +1,20 @@
 package com.generation.blogpessoal.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -16,18 +24,24 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id ;
 
-	@NotNull
+	@NotNull(message = "O nome é obrigatório!")
 	@Size(min = 3, max = 200)
 	private String nome ;
 	
-	@NotNull
+	@NotNull(message = "O email é obrigatório!")
+	@Email(message = "Insira um email válido!")
 	@Size(min =4, max = 50)
 	private String usuario ;
 	
-	@NotNull
-	@Size (min =4, max = 50)
+	@NotBlank(message = "A senha é obrigatória!")
+	@Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
 	private String senha ;
-
+	
+	@NotNull
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("usuario")
+	private List<Postagem> postagem;
+	
 	public Long getId() {
 		return id;
 	}
@@ -59,5 +73,13 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+
+	public List<Postagem> getPostagem() {
+		return postagem;
+	}
+
+	public void setPostagem(List<Postagem> postagem) {
+		this.postagem = postagem;
+	}
+		
 }
