@@ -35,11 +35,11 @@ public class UsuarioService {
 		Optional<Usuario> optional = repository.findByUsuario(usuario.getUsuario());
 		
 		if(optional.isPresent()) {
-			if(encoder.matches(optional.get().getSenha(), usuario.getSenha())) {
+			if(encoder.matches(usuario.getSenha(), optional.get().getSenha())) {
 				UsuarioCredenciaisDTO credenciaisDTO = new UsuarioCredenciaisDTO(
 						optional.get().getId(),
 						optional.get().getUsuario(),
-						gerarToken(usuario.getUsuario(), optional.get().getSenha())
+						gerarToken(usuario.getUsuario(), usuario.getSenha())
 						);
 				return credenciaisDTO;
 			} else {
@@ -51,7 +51,7 @@ public class UsuarioService {
 	}
 
 	private String gerarToken(String usuario, String senha) {
-		String token = usuario + ":" + senha; // email@email.com:od84yjro28t74yjto87ey
+		String token = usuario + ":" + senha; // totoro@totoro.com:senhadototoro
 		byte[] tokenCodificado = Base64.encodeBase64(token.getBytes(Charset.forName("US-ASCII")));
 		String autenticacao = "Basic " + new String (tokenCodificado); // Basic 9875j3948iydy4rj34yt893j5j
 		return autenticacao;
