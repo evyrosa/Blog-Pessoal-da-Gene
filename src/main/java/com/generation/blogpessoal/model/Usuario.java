@@ -37,7 +37,6 @@ public class Usuario {
 	@Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
 	private String senha ;
 	
-	@NotNull
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("usuario")
 	private List<Postagem> postagem;
