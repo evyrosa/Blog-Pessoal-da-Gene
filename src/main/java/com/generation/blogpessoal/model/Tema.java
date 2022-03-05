@@ -23,7 +23,7 @@ public class Tema {
 	private Long id ;
 	
 	@NotNull(message = "A descrição é obrigatória!")
-	@Size(min = 7, max = 200)
+	@Size(min = 3, max = 200)
 	private String descricao ;
 	
 	@OneToMany(mappedBy = "tema", cascade = CascadeType.REMOVE)

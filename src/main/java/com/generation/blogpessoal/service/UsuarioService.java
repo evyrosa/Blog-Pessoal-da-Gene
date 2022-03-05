@@ -17,12 +17,15 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
+
+	private static String criptografarSenha(String senha){
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(senha);
+	}
 	
 	public Usuario cadastrarUsuario(Usuario usuario) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
-		String senhaCriptografada = encoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaCriptografada);
+		usuario.setSenha(criptografarSenha(usuario.getSenha()));
 		
 		return repository.save(usuario);
 	}
@@ -52,4 +55,16 @@ public class UsuarioService {
 		String autenticacao = "Basic " + new String (tokenCodificado); // Basic 9875j3948iydy4rj34yt893j5j
 		return autenticacao;
 	}
+
+	public Optional<Usuario> atualizarUsuario (Usuario usuarioAlterado){
+		Optional<Usuario> optional = repository.findById(usuarioAlterado.getId());
+
+		if (optional.isPresent()){
+			usuarioAlterado.setSenha(criptografarSenha(usuarioAlterado.getSenha()));
+			return Optional.ofNullable(repository.save(usuarioAlterado));
+		} else {
+			return Optional.empty();
+		}
+	}
+
 }
